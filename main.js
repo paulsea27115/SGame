@@ -40,6 +40,7 @@ const ground = Bodies.rectangle(310,820,620,60,{
 
 const topLine = Bodies.rectangle(310,150,620,2,{
     isStatic: true, // 고정해주는 기능
+    isSensor: true,
     render: {fillStyle: '#E6B143'}
 });
 // 벽 배치
