@@ -1,4 +1,4 @@
-import { FRUITS } from "./fruit";
+import { FRUITS } from "./fruit.js";
 
 const Engine = Matter.Engine,
       Render = Matter.Render,
@@ -48,16 +48,19 @@ World.add(world,[leftWall,rightWall,ground,topLine]);
 Render.run(render);
 Runner.run(engine);
 
+function addFruit() {
+    // 과일 떨어지는 함수
+    const index = 3;
+    
+    const fruit = FRUITS[index];
 
-// 과일 떨어지는 함수
-const index = 0;
- 
-const fruit = FRUITS[index];
+    const body = Bodies.circle(300,50, fruit.radius, {
+        render: {
+            sprite : {texture: `${fruit.name}.png`}
+        }
+    });
 
-const body = Bodies.circle(300,50, fruit.radius, {
-    render: {
-        sprite : {texture: `${fruit.name}.png`}
-    }
-});
+    World.add(world, body);
+}
 
-World.add(world, body);
+addFruit();
