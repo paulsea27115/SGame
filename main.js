@@ -49,17 +49,26 @@ World.add(world,[leftWall,rightWall,ground,topLine]);
 Render.run(render);
 Runner.run(engine);
 
+let currentBody = null;
+let currentfruit = null;
+
 function addFruit() {
     // 과일 떨어지는 함수
-    const index = 3;
+    const index = Math.floor(Math.random() * 5);
     
     const fruit = FRUITS[index];
 
     const body = Bodies.circle(300,50, fruit.radius, {
+        index:"index",
+        isSleeping: true,
         render: {
             sprite : {texture: `${fruit.name}.png`}
-        }
+        },
+        restitution:0.2,
     });
+
+    currentBody = body;
+    currentfruit = fruit;
 
     World.add(world, body);
 }
