@@ -41,6 +41,7 @@ const ground = Bodies.rectangle(310, 820, 620, 60, {
 });
 
 const topLine = Bodies.rectangle(310, 150, 620, 2, {
+    name: "topLine",
     isStatic: true, // 고정해주는 기능
     isSensor: true,
     render: { fillStyle: '#E6B143' }
@@ -64,7 +65,7 @@ function addFruit() {
     const body = Bodies.circle(300, 50, fruit.radius, {
         index: index,
         isSleeping: true,
-        render: {
+        render: {   
             sprite: { texture: `${fruit.name}.png` }
         },
         restitution: 0.2,
@@ -82,6 +83,7 @@ window.onkeydown = (e) => {
     if (!disableAction) {
         switch (e.code) {
             case "KeyA":
+                if(currentBody.position.x - currentfruit.radius > 30)
                 Body.setPosition(currentBody, {
                     x: currentBody.position.x - 10,
                     y: currentBody.position.y
@@ -93,6 +95,7 @@ window.onkeydown = (e) => {
                 setTimeout(() => { addFruit(); disableAction = false; }, 1000)
                 break;
             case "KeyD":
+                if(currentBody.position.x + currentfruit.radius < 590)
                 Body.setPosition(currentBody, {
                     x: currentBody.position.x + 10,
                     y: currentBody.position.y
@@ -129,6 +132,12 @@ Events.on(engine, "collisionStart", (e)=>{
             );
 
             World.add(world, newBody);
+
+            
+        }
+        if(!disableAction && (collision.bodyA.name === "topLine" || collision.bodyB.name === "topLine")) {
+            alert("Game Over!");
+            disableAction = true;
         }
     })
 });
