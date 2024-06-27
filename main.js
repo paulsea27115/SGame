@@ -1,14 +1,15 @@
 import { FRUITS } from "./fruit.js";
 
-const Engine = Matter.Engine,
+var Engine = Matter.Engine,
     Render = Matter.Render,
     Runner = Matter.Runner,
     World = Matter.World,
     Bodies = Matter.Bodies,
-    Body = Matter.Body;
+    Body = Matter.Body,
+    Events = Matter.Events;
 // 앤진 선언
 const engine = Engine.create();
-
+// console.log("실행");
 // 렌더 선언
 const render = Render.create({
     engine,
@@ -61,7 +62,7 @@ function addFruit() {
     const fruit = FRUITS[index];
 
     const body = Bodies.circle(300, 50, fruit.radius, {
-        index: "index",
+        index: index,
         isSleeping: true,
         render: {
             sprite: { texture: `${fruit.name}.png` }
@@ -75,7 +76,7 @@ function addFruit() {
     World.add(world, body);
 }
 
-addFruit();
+
 
 window.onkeydown = (e) => {
     if (!disableAction) {
@@ -100,3 +101,37 @@ window.onkeydown = (e) => {
         }
     }
 }
+
+Events.on(engine, "collisionStart", (e)=>{
+    
+    e.pairs.forEach((collision)=>{
+        if(collision.bodyA.index == collision.bodyB.index) {
+            const index = collision.bodyA.index;
+
+            console.log(index);
+
+            World.remove(world, [collision.bodyA, collision.bodyB]);
+
+            const newFruit = FRUITS[index+1];
+
+            console.log(newFruit.radius);
+
+            const newBody = Bodies.circle(
+                collision.collision.supports[0].x,
+                collision.collision.supports[0].y,
+                newFruit.radius,
+                {
+                    index : index + 1,
+                    render : {
+                        sprite : { texture: `${newFruit.name}.png` }
+                    },
+                }
+            );
+
+            World.add(world, newBody);
+        }
+    })
+});
+
+addFruit();
+
